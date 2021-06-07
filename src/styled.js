@@ -18,8 +18,11 @@ export const Tapps = styled.Text`
 `;
 
 export const Apps = styled.Text`
+  color: #fff;
   font-size: 18px;
-  margin-top: 20px;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
 `;
 
 export const Lock = styled.Image`
@@ -50,4 +53,8 @@ export const ButtonText = styled.Text`
   font-size: 22px;
   color: #fff;
   text-align: center;
+`;
+
+export const ScrollView = styled.ScrollView`
+  margin-left: 40px;
 `;

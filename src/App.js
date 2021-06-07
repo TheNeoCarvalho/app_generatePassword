@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Clipboard, Keyboard} from 'react-native';
+import {Clipboard, Keyboard, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Container,
@@ -10,15 +10,17 @@ import {
   ButtonText,
   Tapps,
   Apps,
+  ScrollView,
 } from './styled';
 const App = () => {
   const [app, setApp] = useState('');
   const [hash, setHash] = useState('');
   const [apps, setApps] = useState([]);
+  const [copy, setCopy] = useState('');
 
   async function gen() {
     const chars =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*-+';
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     let password = '';
 
@@ -54,6 +56,11 @@ const App = () => {
     }
   };
 
+  const copyTopaste = app => {
+    Clipboard.setString(app.pass);
+    alert(`A senha do app ${app.app} foi copiado para área de transferência`);
+  };
+
   useEffect(() => {
     retrieveData();
   }, [apps]);
@@ -81,10 +88,15 @@ const App = () => {
       <Button onPress={gen}>
         <ButtonText>Gerar Senha</ButtonText>
       </Button>
+
       <Tapps>Meus Apps</Tapps>
-      {apps.map(a => (
-        <Apps>{a.app}</Apps>
-      ))}
+      <ScrollView style={{width: '100%', paddingHorizontal: 10}}>
+        {apps.map(a => (
+          <Button onPress={() => copyTopaste(a)}>
+            <Apps>{a.app}</Apps>
+          </Button>
+        ))}
+      </ScrollView>
     </Container>
   );
 };
