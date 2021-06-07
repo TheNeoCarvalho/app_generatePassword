@@ -1,13 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {Clipboard, AsyncStorage, Text} from 'react-native';
-import {Container, Titulo, Lock, Input, Button, ButtonText} from './styled';
+import {Clipboard, Keyboard} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Container,
+  Titulo,
+  Lock,
+  Input,
+  Button,
+  ButtonText,
+  Tapps,
+  Apps,
+} from './styled';
 const App = () => {
   const [app, setApp] = useState('');
   const [hash, setHash] = useState('');
-  const [apps, setApps] = useState([
-    {app: 'App1', pass: '98787guy'},
-    {app: 'App2', pass: '9aSDA87guy'},
-  ]);
+  const [apps, setApps] = useState([]);
 
   async function gen() {
     const chars =
@@ -20,32 +27,27 @@ const App = () => {
       password += chars.substring(generated, generated + 1);
     }
     setHash(password);
-    // Clipboard.setString(password);
-    // alert('Senha copiada para área de transferência');
+    Clipboard.setString(password);
+    alert('Senha copiada para área de transferência');
 
     const data = {
       app,
       pass: password,
     };
 
-    // try {
-    const values = await AsyncStorage.getItem('@MyApps');
-    const datas = [...values, data];
-
-    await AsyncStorage.setItem('@MyApps', JSON.stringify(datas));
+    const datas = [...apps, data];
+    const obj = JSON.stringify(datas);
+    await AsyncStorage.setItem('MyApps', obj);
     setApps(datas);
-    // alert('App/Senha adicionados');
-    // } catch (error) {
-    //   alert('Erro ao salvar');
-    // }
+    Keyboard.dismiss();
   }
 
   const retrieveData = async () => {
     console.disableYellowBox = true;
     try {
-      const value = await AsyncStorage.getItem('@MyApps');
-      if (value !== null) {
-        setApps(JSON.parse(value));
+      const values = await AsyncStorage.getItem('MyApps');
+      if (values) {
+        setApps(JSON.parse(values));
       }
     } catch (error) {
       alert(error);
@@ -54,7 +56,7 @@ const App = () => {
 
   useEffect(() => {
     retrieveData();
-  }, []);
+  }, [apps]);
 
   return (
     <Container>
@@ -79,8 +81,10 @@ const App = () => {
       <Button onPress={gen}>
         <ButtonText>Gerar Senha</ButtonText>
       </Button>
-      <Titulo>Apps</Titulo>
-      <Text />
+      <Tapps>Meus Apps</Tapps>
+      {apps.map(a => (
+        <Apps>{a.app}</Apps>
+      ))}
     </Container>
   );
 };

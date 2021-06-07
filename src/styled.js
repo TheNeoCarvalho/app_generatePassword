@@ -12,6 +12,16 @@ export const Titulo = styled.Text`
   margin-top: 20px;
 `;
 
+export const Tapps = styled.Text`
+  font-size: 24px;
+  margin-top: 20px;
+`;
+
+export const Apps = styled.Text`
+  font-size: 18px;
+  margin-top: 20px;
+`;
+
 export const Lock = styled.Image`
   width: 180px;
   height: 180px;
